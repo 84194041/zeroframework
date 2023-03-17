@@ -7,7 +7,12 @@ namespace ZeroFramework.DeviceCenter.Infrastructure.Repositories
 {
     public class OrderRepository : EfCoreRepository<DeviceCenterDbContext, Order>, IOrderRepository
     {
-        public OrderRepository(DeviceCenterDbContext dbContext) : base(dbContext) { }
+        private readonly IOrderItemRepository _orderItemRepository;
+
+        public OrderRepository(DeviceCenterDbContext dbContext, IOrderItemRepository orderItemRepository) : base(dbContext)
+        {
+            _orderItemRepository = orderItemRepository;
+        }
 
         public Order Add(Order order)
         {
@@ -36,5 +41,54 @@ namespace ZeroFramework.DeviceCenter.Infrastructure.Repositories
         {
             _dbContext.Entry(order).State = EntityState.Modified;
         }
+
+        public async Task<List<Order>> GetOrderListAsync()
+        {
+            var query = (await _dbContext.Set<Order>()
+            .OrderBy(t => t.Id)
+            .Skip((1 - 1) * 1).Take(1)
+            .GroupJoin(_dbContext.Set<OrderItem>(), left => left.Id, right => right.OrderId, (left, right) => new
+            {
+                Id = left.Id,
+                BuyerId = left.BuyerId,
+                OrderItem = right
+            }).SelectMany(left => left.OrderItem.DefaultIfEmpty(), (left, right) => new OrderItem1
+            {
+                OrderId = left.Id,
+                ProductId = right!.ProductId
+            })
+            .ToListAsync())
+            .GroupBy(d => d.OrderId)
+            .Select(g =>
+            {
+                var first = g.FirstOrDefault();
+                return new OrderListResponseModel1
+                {
+                    OrderId = first!.OrderId,
+                    OrderItems = g.GroupBy(d => new { d.OrderId, d.ProductId })
+                                  .Select(i => new OrderItem1 { OrderId = i.Key.OrderId, ProductId = i.Key.ProductId }).ToList()
+                };
+            }).ToList();
+
+            return null!;
+        }
+    }
+
+    public class OrderListResponseModel1
+    {
+        public Guid OrderId { get; set; }
+
+        public List<OrderItem1> OrderItems = new List<OrderItem1>();
+    }
+
+    public class OrderItem1
+    {
+        public Guid OrderId { get; set; }
+
+        public int ProductId { get; set; }
+
+        public decimal UnitPrice { get; set; }
+
+        public int Units { get; set; }
     }
 }

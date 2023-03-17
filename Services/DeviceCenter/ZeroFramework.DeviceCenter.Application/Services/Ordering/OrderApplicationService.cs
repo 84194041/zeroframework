@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using ZeroFramework.DeviceCenter.Application.IntegrationEvents.Events.Ordering;
 using ZeroFramework.DeviceCenter.Application.Models.Ordering;
 using ZeroFramework.DeviceCenter.Domain.Aggregates.OrderAggregate;
-using ZeroFramework.DeviceCenter.Domain.Repositories;
 using ZeroFramework.DeviceCenter.Domain.Services.Ordering;
-using ZeroFramework.EventBus.Abstractions;
 
 namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
 {
@@ -12,17 +9,27 @@ namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
     {
         private readonly IOrderDomainService _orderDomainService;
 
-        private readonly IRepository<Order> _orderRepository;
+        //private readonly IRepository<Order> _orderRepository;
 
-        private readonly IEventBus _eventBus;
+        //private readonly IEventBus _eventBus;
 
         private readonly IMapper _mapper;
 
-        public OrderApplicationService(IOrderDomainService orderDomainService, IRepository<Order> orderRepository, IEventBus eventBus, IMapper mapper)
+        private readonly IOrderRepository _orderRepository;
+
+        private readonly IOrderItemRepository _orderItemRepository;
+
+        public OrderApplicationService(IOrderDomainService orderDomainService,
+            //IRepository<Order> orderRepository, 
+            IOrderRepository orderRepository,
+            IOrderItemRepository orderItemRepository,
+            //IEventBus eventBus, 
+            IMapper mapper)
         {
             _orderDomainService = orderDomainService;
             _orderRepository = orderRepository;
-            _eventBus = eventBus;
+            _orderItemRepository = orderItemRepository;
+            //_eventBus = eventBus;
             _mapper = mapper;
         }
 
@@ -32,7 +39,7 @@ namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
 
             await _orderDomainService.AddAsync(order, cancellationToken);
 
-            await _eventBus.PublishAsync(new OrderStartedIntegrationEvent(Guid.NewGuid()), cancellationToken);
+            //await _eventBus.PublishAsync(new OrderStartedIntegrationEvent(Guid.NewGuid()), cancellationToken);
 
             return await Task.FromResult(true);
         }
@@ -42,6 +49,13 @@ namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
             List<Order> orders = await _orderRepository.GetListAsync(model.PageNumber, model.PageSize, sorting: o => o.CreationTime, cancellationToken: cancellationToken);
 
             return _mapper.Map<List<OrderListResponseModel>>(orders);
+        }
+
+        public async Task<List<OrderListResponseModel>> GetOrderListAsync(OrderListRequestModel model, CancellationToken cancellationToken = default)
+        {
+            var list = await _orderRepository.GetOrderListAsync();
+
+            return null;
         }
     }
 }

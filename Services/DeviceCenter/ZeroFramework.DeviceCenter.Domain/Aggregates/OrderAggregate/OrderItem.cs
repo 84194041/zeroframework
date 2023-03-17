@@ -11,7 +11,9 @@ namespace ZeroFramework.DeviceCenter.Domain.Aggregates.OrderAggregate
 
         public int Units { get; private set; }
 
-        public OrderItem(int productId, decimal unitPrice, int units = 1)
+        public Guid OrderId { get; private set; }
+
+        public OrderItem(int productId, decimal unitPrice, Guid orderId, int units = 1)
         {
             if (units <= 0)
             {
@@ -26,6 +28,7 @@ namespace ZeroFramework.DeviceCenter.Domain.Aggregates.OrderAggregate
             ProductId = productId;
             UnitPrice = unitPrice;
             Units = units;
+            OrderId = orderId;
         }
 
         public void AddUnits(int units)

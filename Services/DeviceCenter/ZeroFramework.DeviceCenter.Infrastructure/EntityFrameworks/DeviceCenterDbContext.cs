@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 using ZeroFramework.DeviceCenter.Domain.Aggregates.TenantAggregate;
 using ZeroFramework.DeviceCenter.Domain.Entities;
@@ -35,5 +36,7 @@ namespace ZeroFramework.DeviceCenter.Infrastructure.EntityFrameworks
 
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.LogTo(Console.WriteLine, LogLevel.Debug);
     }
 }

@@ -93,6 +93,7 @@ namespace ZeroFramework.DeviceCenter.Infrastructure
 
             services.AddTransient<IBuyerRepository, BuyerRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
             services.AddTransient<IPermissionGrantRepository, PermissionGrantRepository>();
             services.AddTransient<IMeasurementRepository, MeasurementRepository>();
             services.AddTransient<IDeviceRepository, DeviceRepository>();

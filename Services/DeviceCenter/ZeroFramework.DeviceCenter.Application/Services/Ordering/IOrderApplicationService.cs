@@ -7,5 +7,7 @@ namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
         Task<List<OrderListResponseModel>> GetListAsync(OrderListRequestModel model, CancellationToken cancellationToken = default);
 
         Task<bool> CreateAsync(OrderCreateRequestModel model, CancellationToken cancellationToken = default);
+
+        Task<List<OrderListResponseModel>> GetOrderListAsync(OrderListRequestModel model, CancellationToken cancellationToken = default);
     }
 }

@@ -12,5 +12,7 @@ namespace ZeroFramework.DeviceCenter.Domain.Aggregates.OrderAggregate
         void Update(Order order);
 
         Task<Order> GetAsync(Guid orderId);
+
+        Task<List<Order>> GetOrderListAsync();
     }
 }

@@ -56,7 +56,7 @@ namespace ZeroFramework.DeviceCenter.Domain.Aggregates.OrderAggregate
             else
             {
                 //add validated new order item
-                var orderItem = new OrderItem(productId, unitPrice, units);
+                var orderItem = new OrderItem(productId, unitPrice, Guid.NewGuid(), units);
                 _orderItems.Add(orderItem);
             }
         }
