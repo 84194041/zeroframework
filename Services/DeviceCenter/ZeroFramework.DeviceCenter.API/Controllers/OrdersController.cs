@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ZeroFramework.DeviceCenter.Application.Models.Ordering;
 using ZeroFramework.DeviceCenter.Application.Queries.Ordering;
 using ZeroFramework.DeviceCenter.Application.Services.Ordering;
+using ZeroFramework.DeviceCenter.Domain.Exceptions;
 
 namespace ZeroFramework.DeviceCenter.API.Controllers
 {
@@ -52,7 +53,9 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
         public async Task<ActionResult> GetOrders([FromQuery] OrderListRequestModel model)
         {
             var list = await _orderApplicationService.GetOrderListAsync(model);
-            return Ok(list);
+            //return Ok(list);
+            //return Content("this is content");
+            throw new BizException("bizException");
         }
     }
 }

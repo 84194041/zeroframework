@@ -23,6 +23,7 @@ namespace ZeroFramework.DeviceCenter.API
             services.AddHttpContextAccessor();
 
             //services.AddHostedService<MockSampleWorker>();
+            services.AddScoped<GlobalExceptionFilterAttribute>();
 
             return services;
         }

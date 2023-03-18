@@ -1,9 +1,11 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NLog.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ZeroFramework.DeviceCenter.Application;
 using ZeroFramework.DeviceCenter.Domain;
+using ZeroFramework.DeviceCenter.Domain.Exceptions;
 using ZeroFramework.DeviceCenter.Infrastructure;
 [assembly: HostingStartup(typeof(ZeroFramework.DeviceCenter.API.Extensions.Hosting.CustomHostingStartup))]
 namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
@@ -61,6 +63,10 @@ namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
                 {
                     options.ModelBinderProviders.Add(new ModelBinding.SortingBinderProvider());
                     options.Filters.Add<HttpResponseExceptionFilter>();
+                    //添加过滤器
+                    options.Filters.Add(new CommonResultFilterAttribute());
+                    //GlobalExceptionFilterAttribute构造中注入其他服务，需要通过ServiceFilter添加
+                    options.Filters.Add(new Microsoft.AspNetCore.Mvc.ServiceFilterAttribute(typeof(GlobalExceptionFilterAttribute)));
                 });
             });
         }
