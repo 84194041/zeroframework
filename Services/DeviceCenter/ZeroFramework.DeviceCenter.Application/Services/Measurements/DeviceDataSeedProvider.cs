@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using ZeroFramework.DeviceCenter.Application.Models.Measurements;
 using ZeroFramework.DeviceCenter.Domain.Aggregates.DeviceAggregate;
 using ZeroFramework.DeviceCenter.Domain.Aggregates.ProductAggregate;

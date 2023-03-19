@@ -55,7 +55,7 @@ namespace ZeroFramework.DeviceCenter.Application.Services.Ordering
         {
             var list = await _orderRepository.GetOrderListAsync();
 
-            return null;
+            return null!;
         }
     }
 }

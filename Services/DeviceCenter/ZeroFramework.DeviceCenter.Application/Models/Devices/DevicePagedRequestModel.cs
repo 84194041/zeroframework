@@ -1,7 +1,7 @@
 ﻿using ZeroFramework.DeviceCenter.Application.Services.Generics;
 using ZeroFramework.DeviceCenter.Domain.Aggregates.DeviceAggregate;
 
-namespace ZeroFramework.DeviceCenter.Application.Services.Devices
+namespace ZeroFramework.DeviceCenter.Application.Models.Devices
 {
     public class DevicePagedRequestModel : PagedRequestModel
     {

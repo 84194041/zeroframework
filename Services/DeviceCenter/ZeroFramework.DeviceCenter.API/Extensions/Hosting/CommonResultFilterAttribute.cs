@@ -10,8 +10,7 @@ namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
         {
             if (context.Result is ObjectResult objRst)
             {
-                if (objRst.Value is ApiResult)
-                    return;
+                if (objRst.Value is ApiResult) return;
                 context.Result = new ObjectResult(new ApiResult
                 {
                     Success = true,

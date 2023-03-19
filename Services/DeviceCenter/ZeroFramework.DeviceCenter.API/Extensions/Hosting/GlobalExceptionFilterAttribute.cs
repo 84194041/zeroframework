@@ -16,7 +16,7 @@ namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
         public override void OnException(ExceptionContext context)
         {
             context.ExceptionHandled = true;
-            var isBizExp = context.Exception is Domain.Exceptions.BizException;
+            var isBizExp = context.Exception is BizException;
             context.Result = new ObjectResult(new ApiResult
             {
                 Success = false,

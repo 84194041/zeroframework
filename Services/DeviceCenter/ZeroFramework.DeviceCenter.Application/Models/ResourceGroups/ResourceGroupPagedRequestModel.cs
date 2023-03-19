@@ -1,6 +1,6 @@
 ﻿using ZeroFramework.DeviceCenter.Application.Services.Generics;
 
-namespace ZeroFramework.DeviceCenter.Application.Services.ResourceGroups
+namespace ZeroFramework.DeviceCenter.Application.Models.ResourceGroups
 {
     public class ResourceGroupPagedRequestModel : PagedRequestModel
     {
