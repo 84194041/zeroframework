@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using System.Reflection;
 using ZeroFramework.DeviceCenter.Application.Behaviors;
 using ZeroFramework.DeviceCenter.Application.Infrastructure;
+using ZeroFramework.DeviceCenter.Application.IntegrationEvents.EventHandling.Ordering;
+using ZeroFramework.DeviceCenter.Application.IntegrationEvents.Events.Ordering;
 using ZeroFramework.DeviceCenter.Application.Models.Monitoring;
 using ZeroFramework.DeviceCenter.Application.Models.Projects;
 using ZeroFramework.DeviceCenter.Application.Queries.Factories;
@@ -108,10 +110,12 @@ namespace ZeroFramework.DeviceCenter.Application
 
         private static IServiceCollection AddIntegrationEvents(this IServiceCollection services)
         {
-            var exportedTypes = Assembly.GetExecutingAssembly().ExportedTypes;
+            //var exportedTypes = Assembly.GetExecutingAssembly().ExportedTypes;
 
-            var integrationEventHandlers = exportedTypes.Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)) && t.IsClass);
-            integrationEventHandlers.ToList().ForEach(t => services.AddTransient(typeof(IIntegrationEventHandler), t));
+            //var integrationEventHandlers = exportedTypes.Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)) && t.IsClass);
+            //integrationEventHandlers.ToList().ForEach(t => services.AddTransient(typeof(IIntegrationEventHandler), t));
+
+            services.AddTransient<IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>, OrderPaymentFailedIntegrationEventHandler>();
 
             services.AddTransient<IIntegrationEventService, IntegrationEventService>();
 

@@ -30,7 +30,7 @@ namespace ZeroFramework.EventBus
         {
             var eventName = GetEventKey<T>();
 
-            DoAddSubscription(typeof(TH), eventName, isDynamic: false);
+            DoAddSubscription(typeof(IIntegrationEventHandler<T>), eventName, isDynamic: false);
 
             if (!_eventTypes.Contains(typeof(T)))
             {
@@ -56,7 +56,7 @@ namespace ZeroFramework.EventBus
             }
             else
             {
-                _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));
+                _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));//IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>
             }
         }
 

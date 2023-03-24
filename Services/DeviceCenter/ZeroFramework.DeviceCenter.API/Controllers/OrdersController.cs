@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ZeroFramework.DeviceCenter.Application.IntegrationEvents.Events.Ordering;
 using ZeroFramework.DeviceCenter.Application.Models.Ordering;
 using ZeroFramework.DeviceCenter.Application.Queries.Ordering;
 using ZeroFramework.DeviceCenter.Application.Services.Ordering;
+using ZeroFramework.EventBus.Abstractions;
 
 namespace ZeroFramework.DeviceCenter.API.Controllers
 {
@@ -11,17 +13,26 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
     [ApiController]
     public class OrdersController : Controller
     {
+        private readonly ILogger<OrdersController> _logger;
+
         private readonly IOrderQueries _orderQueries;
 
         private readonly IMediator _mediator;
 
         private readonly IOrderApplicationService _orderApplicationService;
 
-        public OrdersController(IOrderQueries orderQueries, IMediator mediator, IOrderApplicationService orderApplicationService)
+        private readonly IEventBus _eventBus;
+
+        private readonly IServiceProvider _serviceProvider;
+
+        public OrdersController(IServiceProvider serviceProvider, ILogger<OrdersController> logger, IOrderQueries orderQueries, IMediator mediator, IOrderApplicationService orderApplicationService, IEventBus eventBus)
         {
             _orderQueries = orderQueries;
             _mediator = mediator;
             _orderApplicationService = orderApplicationService;
+            _eventBus = eventBus;
+            _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
         //[HttpGet]
@@ -51,8 +62,18 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOrders([FromQuery] OrderListRequestModel model)
         {
-            var list = await _orderApplicationService.GetOrderListAsync(model);
-            return Ok(list);
+            try
+            {
+                await _eventBus.PublishAsync(new OrderPaymentFailedIntegrationEvent(Guid.NewGuid()) { Id = Guid.NewGuid(), CreationTime = DateTime.Now });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace!);
+            }
+
+            return Ok();
+            //var list = await _orderApplicationService.GetOrderListAsync(model);
+            //return Ok(list);
             //return Content("this is content");
             //throw new BizException("返回错误信息");
         }

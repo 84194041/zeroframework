@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Localization;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ZeroFramework.DeviceCenter.API.Controllers;
 using ZeroFramework.DeviceCenter.Application.IntegrationEvents.EventHandling.Ordering;
 using ZeroFramework.DeviceCenter.Application.IntegrationEvents.Events.Ordering;
 using ZeroFramework.DeviceCenter.Domain.Repositories;
@@ -15,7 +16,7 @@ namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
         {
             return (app) =>
             {
-                if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsStaging())
+                if (app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().IsDevelopment())
                 {
                     var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
                     eventBus.SubscribeDynamic<OrderPaymentSucceededDynamicIntegrationEventHandler>(nameof(OrderPaymentSucceededIntegrationEvent));

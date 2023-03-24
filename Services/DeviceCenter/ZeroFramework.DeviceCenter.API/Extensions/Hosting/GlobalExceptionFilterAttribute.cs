@@ -17,17 +17,20 @@ namespace ZeroFramework.DeviceCenter.API.Extensions.Hosting
         {
             context.ExceptionHandled = true;
             var isBizExp = context.Exception is BizException;
-            context.Result = new ObjectResult(new ApiResult
+            if (isBizExp)
             {
-                Success = false,
-                Message = context.Exception.Message
-            });
-            //非业务异常记录errorLog,返回500状态码，前端通过捕获500状态码进行友好提示
-            if (isBizExp == false)
-            {
-                _logger.LogError(context.Exception, context.Exception.Message);
-                context.HttpContext.Response.StatusCode = 500;
+                context.Result = new ObjectResult(new ApiResult
+                {
+                    Success = false,
+                    Message = context.Exception.Message
+                });
             }
+            //非业务异常记录errorLog,返回500状态码，前端通过捕获500状态码进行友好提示
+            //if (isBizExp == false)
+            //{
+            //    _logger.LogError(context.Exception, context.Exception.Message);
+            //    context.HttpContext.Response.StatusCode = 500;
+            //}
             base.OnException(context);
         }
     }
