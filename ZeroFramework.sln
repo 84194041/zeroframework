@@ -35,6 +35,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroFramework.IdentityServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroFramework.ReverseProxy", "ApiGateways\ZeroFramework.ReverseProxy\ZeroFramework.ReverseProxy.csproj", "{83C5B53D-5074-40FF-B511-27AF30EE9EEA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{5EE27985-3054-4D0D-8DDD-AC4F0ABB8F18}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroFramework.Payment.WeChat", "BuildingBlocks\Payment\ZeroFramework.Payment.WeChat\ZeroFramework.Payment.WeChat.csproj", "{9AE85984-94DC-4784-979A-86D00CCD288B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroFramework.Payment.AliPay", "BuildingBlocks\Payment\ZeroFramework.Payment.AliPay\ZeroFramework.Payment.AliPay.csproj", "{737AC3B5-1EFD-461B-B33E-F31294B396D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +83,14 @@ Global
 		{83C5B53D-5074-40FF-B511-27AF30EE9EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C5B53D-5074-40FF-B511-27AF30EE9EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C5B53D-5074-40FF-B511-27AF30EE9EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE85984-94DC-4784-979A-86D00CCD288B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE85984-94DC-4784-979A-86D00CCD288B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE85984-94DC-4784-979A-86D00CCD288B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE85984-94DC-4784-979A-86D00CCD288B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{737AC3B5-1EFD-461B-B33E-F31294B396D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{737AC3B5-1EFD-461B-B33E-F31294B396D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{737AC3B5-1EFD-461B-B33E-F31294B396D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{737AC3B5-1EFD-461B-B33E-F31294B396D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +108,9 @@ Global
 		{B49C1782-28A1-4C05-A3E5-7CF25CB8A1EE} = {751B9ACA-0343-48BF-9DBE-1383E96EFC5A}
 		{90916A42-38F4-43F4-B708-7E6C24431337} = {F7A2B173-F63E-445B-9228-1C770ED82471}
 		{83C5B53D-5074-40FF-B511-27AF30EE9EEA} = {E38125DF-3F39-4179-BF34-80E0A16A2A8C}
+		{5EE27985-3054-4D0D-8DDD-AC4F0ABB8F18} = {10049AAF-7806-46A7-B705-BF3486680978}
+		{9AE85984-94DC-4784-979A-86D00CCD288B} = {5EE27985-3054-4D0D-8DDD-AC4F0ABB8F18}
+		{737AC3B5-1EFD-461B-B33E-F31294B396D6} = {5EE27985-3054-4D0D-8DDD-AC4F0ABB8F18}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1BD3363E-A076-4C8B-B139-020BE0972350}

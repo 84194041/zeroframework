@@ -1,10 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using ZeroFramework.DeviceCenter.Application.IntegrationEvents.Events.Ordering;
 using ZeroFramework.DeviceCenter.Application.Models.Ordering;
 using ZeroFramework.DeviceCenter.Application.Queries.Ordering;
 using ZeroFramework.DeviceCenter.Application.Services.Ordering;
 using ZeroFramework.EventBus.Abstractions;
+using ZeroFramework.Payment.WeChat.Models;
+using ZeroFramework.Payment.WeChat.Services;
 
 namespace ZeroFramework.DeviceCenter.API.Controllers
 {
@@ -25,7 +28,9 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
 
         private readonly IServiceProvider _serviceProvider;
 
-        public OrdersController(IServiceProvider serviceProvider, ILogger<OrdersController> logger, IOrderQueries orderQueries, IMediator mediator, IOrderApplicationService orderApplicationService, IEventBus eventBus)
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public OrdersController(IServiceProvider serviceProvider, ILogger<OrdersController> logger, IOrderQueries orderQueries, IMediator mediator, IOrderApplicationService orderApplicationService, IEventBus eventBus, IHttpClientFactory httpClientFactory)
         {
             _orderQueries = orderQueries;
             _mediator = mediator;
@@ -33,6 +38,7 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
             _eventBus = eventBus;
             _logger = logger;
             _serviceProvider = serviceProvider;
+            _httpClientFactory = httpClientFactory;
         }
 
         //[HttpGet]
@@ -64,11 +70,16 @@ namespace ZeroFramework.DeviceCenter.API.Controllers
         {
             try
             {
+                WeChatPayConfig weChatPayConfig = new WeChatPayConfig("", "", "", "", "", "", "", "", "");
+                WeChatPayService weChatPayService = new WeChatPayService(_logger, weChatPayConfig, _httpClientFactory);
+
+                weChatPayService.Pay("1", "1", "1");
+
                 await _eventBus.PublishAsync(new OrderPaymentFailedIntegrationEvent(Guid.NewGuid()) { Id = Guid.NewGuid(), CreationTime = DateTime.Now });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.StackTrace!);
+                _logger.LogError(ex.Message);
             }
 
             return Ok();

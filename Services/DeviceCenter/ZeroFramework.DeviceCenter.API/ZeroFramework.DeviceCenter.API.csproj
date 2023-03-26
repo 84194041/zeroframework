@@ -14,6 +14,7 @@
 		<Compile Include="..\..\Identity\ZeroFramework.IdentityServer.API\Infrastructure\Swagger\CamelCaseNamingOperationFilter.cs" Link="Infrastructure\Swagger\CamelCaseNamingOperationFilter.cs" />
 		<Compile Include="..\..\Identity\ZeroFramework.IdentityServer.API\Infrastructure\Swagger\SecurityRequirementsOperationFilter.cs" Link="Infrastructure\Swagger\SecurityRequirementsOperationFilter.cs" />
 		<Compile Include="..\ZeroFramework.DeviceCenter.Infrastructure\EntityFrameworks\DeviceCenterDesignTimeDbContextFactory.cs" Link="Infrastructure\Migration\DeviceCenterDesignTimeDbContextFactory.cs" />
+		<Folder Include="Certificates\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,6 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\BuildingBlocks\Payment\ZeroFramework.Payment.WeChat\ZeroFramework.Payment.WeChat.csproj" />
 		<ProjectReference Include="..\ZeroFramework.DeviceCenter.Application\ZeroFramework.DeviceCenter.Application.csproj" />
 		<ProjectReference Include="..\ZeroFramework.DeviceCenter.Infrastructure\ZeroFramework.DeviceCenter.Infrastructure.csproj" />
 	</ItemGroup>
