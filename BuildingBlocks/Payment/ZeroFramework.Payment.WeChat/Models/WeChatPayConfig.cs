@@ -58,14 +58,14 @@
 
         public WeChatPayConfig(string appId, string mchId, string key, string appSecret, string sslCert_Path, string sslCert_Password, string sub_appid, string sub_mch_id, string platformPath)
         {
-            this.APPID = appId;
-            this.MCHID = mchId;
-            this.KEY = key;
-            this.APPSECRET = appSecret;
-            this.SSLCERT_PATH = sslCert_Path;
-            this.SSLCERT_PASSWORD = sslCert_Password;
-            this.SUB_MAC_ID = sub_mch_id;
-            this.SUB_APPID = sub_appid;
+            APPID = appId;
+            MCHID = mchId;
+            KEY = key;
+            APPSECRET = appSecret;
+            SSLCERT_PATH = sslCert_Path;
+            SSLCERT_PASSWORD = sslCert_Password;
+            SUB_MAC_ID = sub_mch_id;
+            SUB_APPID = sub_appid;
 
             if (SSLCERT_PATH.StartsWith("/") || SSLCERT_PATH.StartsWith("\\"))
             {
@@ -74,7 +74,7 @@
 
             if (!string.IsNullOrEmpty(platformPath) && !string.IsNullOrEmpty(SSLCERT_PATH))
             {
-                this.SSLCERT_PATH = Path.Combine(platformPath, SSLCERT_PATH);
+                SSLCERT_PATH = Path.Combine(platformPath, SSLCERT_PATH);
             }
         }
     }

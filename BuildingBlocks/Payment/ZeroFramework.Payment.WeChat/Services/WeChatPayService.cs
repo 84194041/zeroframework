@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using ZeroFramework.Payment.WeChat.Models;
 
 namespace ZeroFramework.Payment.WeChat.Services
@@ -30,6 +31,8 @@ namespace ZeroFramework.Payment.WeChat.Services
         {
             _logger.LogInformation("MicroPay Micropay is processing...");
 
+            _logger.LogInformation("weChatPayConfig:", JsonSerializer.Serialize(weChatPayConfig));
+
             WeChatPayReuestModel data = new(weChatPayConfig?.KEY!);
             data.SetValue("auth_code", auth_code);//授权码
             data.SetValue("body", body);//商品描述
@@ -37,6 +40,8 @@ namespace ZeroFramework.Payment.WeChat.Services
             data.SetValue("out_trade_no", weChatPayApiService.GenerateOutTradeNo());//产生随机的商户订单号
 
             WeChatPayReuestModel result = weChatPayApiService.Micropay(data, 10); //提交被扫支付，接收返回结果
+
+            _logger.LogInformation("WeChatPay Result:", JsonSerializer.Serialize(result));
 
             //如果提交被扫支付接口调用失败，则抛异常
             if (!result.IsSet("return_code") || result.GetValue("return_code").ToString() == "FAIL")
@@ -104,99 +109,6 @@ namespace ZeroFramework.Payment.WeChat.Services
             }
 
             return result.ToPrintStr();
-        }
-
-        /// <summary>
-        /// 提交刷卡支付请求
-        /// </summary>
-        /// <param name="title">商品标题</param>
-        /// <param name="detail">商品详情</param>
-        /// <param name="orderNo">订单号</param>
-        /// <param name="total_fee">总金额</param>
-        /// <param name="auth_code">扫描到客户的授权码</param>
-        /// <returns></returns>
-        public SortedDictionary<string, object> RunSwipingCard(string title, string detail, string orderNo, string total_fee, string auth_code)
-        {
-            _logger.LogInformation("MicroPay Micropay is processing......auth_code：" + auth_code + "；orderNo：" + orderNo);
-
-            WeChatPayReuestModel data = new(weChatPayConfig!.KEY!);
-            data.SetValue("auth_code", auth_code);//授权码
-            data.SetValue("body", title);//商品描述 
-            data.SetValue("detail", detail);//商品详细
-            data.SetValue("total_fee", int.Parse(total_fee));//总金额
-            data.SetValue("out_trade_no", orderNo);//产生随机的商户订单号
-
-            WeChatPayReuestModel result = weChatPayApiService.Micropay(data, 10); //提交被扫支付，接收返回结果
-
-            //如果提交被扫支付接口调用失败，则抛异常
-            if (!result.IsSet("return_code") || result.GetValue("return_code").ToString() == "FAIL")
-            {
-                string returnMsg = result.IsSet("return_msg")! ? result.GetValue("return_msg").ToString()! : "";
-                _logger.LogError("MicroPay Micropay API interface call failure, result : " + result.ToXml());
-                throw new Exception("Micropay API interface call failure, return_msg : " + returnMsg);
-            }
-
-            //签名验证
-            result.CheckSign();
-
-            _logger.LogInformation("MicroPay Micropay response check sign success");
-
-            //刷卡支付直接成功
-            if (result.GetValue("return_code").ToString() == "SUCCESS" && result.GetValue("result_code").ToString() == "SUCCESS")
-            {
-                _logger.LogInformation("MicroPay Micropay business success, result : " + result.ToXml());
-                return result.GetValues();
-            }
-
-            /******************************************************************
-             * 剩下的都是接口调用成功，业务失败的情况
-             * ****************************************************************/
-            //1）业务结果明确失败
-            if (result.GetValue("err_code").ToString() != "USERPAYING" && result.GetValue("err_code").ToString() != "SYSTEMERROR")
-            {
-                _logger.LogInformation("MicroPay micropay API interface call success, business failure, result : " + result.ToXml());
-                return result.GetValues();
-            }
-
-            //2）不能确定是否失败，需查单
-            //用商户订单号去查单
-            //string out_trade_no = data.GetValue("out_trade_no").ToString();
-
-            //确认支付是否成功,每隔一段时间查询一次订单，共查询10次
-            //int queryTimes = 10;//查询次数计数器
-            //while (queryTimes-- > 0)
-            //{
-            //    int succResult = 0;//查询结果
-            //    WxPayData queryResult = Query(out_trade_no, out succResult);
-            //    //如果需要继续查询，则等待2s后继续
-            //    if (succResult == 2)
-            //    {
-            //        Thread.Sleep(2000);
-            //        continue;
-            //    }
-            //    //查询成功,返回订单查询接口返回的数据
-            //    else if (succResult == 1)
-            //    {
-            //        Log.Debug("MicroPay", "Mircopay success, return order query result : " + queryResult.ToXml());
-            //        return queryResult.GetValues();
-            //    }
-            //    //订单交易失败，直接返回刷卡支付接口返回的结果，失败原因会在err_code中描述
-            //    else
-            //    {
-            //        Log.Error("MicroPay", "Micropay failure, return micropay result : " + result.ToXml());
-            //        return result.GetValues();
-            //    }
-            //}
-
-            //确认失败，则撤销订单
-            //Log.Error("MicroPay", "Micropay failure, Reverse order is processing...");
-            //if (!Cancel(out_trade_no))
-            //{
-            //    Log.Error("MicroPay", "Reverse order failure");
-            //    throw new WxPayException("Reverse order failure！");
-            //}
-
-            return result.GetValues();
         }
 
         /**
