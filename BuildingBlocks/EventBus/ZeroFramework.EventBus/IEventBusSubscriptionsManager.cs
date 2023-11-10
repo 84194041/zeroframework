@@ -1,6 +1,5 @@
 ﻿using ZeroFramework.EventBus.Abstractions;
 using ZeroFramework.EventBus.Events;
-using static ZeroFramework.EventBus.InMemoryEventBusSubscriptionsManager;
 
 namespace ZeroFramework.EventBus
 {
